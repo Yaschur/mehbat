@@ -7,12 +7,14 @@ trait Game {
 	protected def clearGameFor(userId: String)
 
 	private[mehbat] def addGamer(who: String, whom: String): Unit = {
+		assert(!who.isEmpty && !whom.isEmpty)
 		if (!isInGame(whom)) {
 			participants = participants :+ whom
 			prepareGameFor(whom)
 		}
 	}
 	private[mehbat] def removeGamer(who: String, whom: String): Unit = {
+		assert(!who.isEmpty && !whom.isEmpty)
 		if (isInGame(whom)) {
 			clearGameFor(whom)
 			participants = participants filterNot whom.==

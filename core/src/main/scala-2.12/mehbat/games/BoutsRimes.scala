@@ -2,6 +2,8 @@ package mehbat.games
 
 import mehbat.core.Game
 
+case class Line(author: String, text: String)
+
 class BoutsRimes extends Game {
 	private var lines: Vector[Line] = Vector.empty
 
@@ -10,7 +12,7 @@ class BoutsRimes extends Game {
 		else {
 			lazy val evenMode = lines.length % 2 == 0
 			lines match {
-				case Vector.empty => Some(participants.head)
+				case Vector() => Some(participants.head)
 				case _ :+ Line(a, _) if evenMode => Some(a)
 				case _ =>
 					val ind = participants.indexWhere(_ == lines.last.author)
@@ -40,6 +42,4 @@ class BoutsRimes extends Game {
 			case _ :+ Line(a1, _) :+ Line(a2, _) if a2 == userId && a1 != a2 =>	lines = lines.init
 			case _ =>
 		}
-
-	case class Line(author: String, text: String)
 }

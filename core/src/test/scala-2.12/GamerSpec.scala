@@ -22,6 +22,17 @@ class GamerSpec extends FlatSpec {
 		assert(!gamer.isInGame)
 	}
 
+	it can "leave game" in {
+		val game = getGame
+		val user = User("abc", "xyz")
+		val gamer = new Gamer(user, game)
+		gamer.enterGame
+
+		gamer.exitGame
+
+		assert(!gamer.isInGame)
+	}
+
 	private def getGame = new Game {
 		override def clearGameFor(userId: String): Unit = ()
 		override protected def prepareGameFor(userId: String): Unit = ()

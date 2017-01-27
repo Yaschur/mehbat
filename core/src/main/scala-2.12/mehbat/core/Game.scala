@@ -13,7 +13,6 @@ trait Game {
 			participants = participants :+ new Participant(whom)
 			prepareGameFor(whom)
 		}
-
 	}
 	private[mehbat] def removeGamer(who: String, whom: String): Unit = {
 		if (isInGame(whom)) {

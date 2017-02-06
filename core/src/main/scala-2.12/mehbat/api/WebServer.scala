@@ -7,8 +7,10 @@ import akka.http.scaladsl.model._
 import akka.http.scaladsl.model.headers.{Authorization, OAuth2BearerToken}
 import akka.http.scaladsl.server.Directives._
 import akka.stream.ActorMaterializer
-
+import authentikat.jwt.JsonWebToken
 import ch.megard.akka.http.cors.CorsDirectives._
+import mehbat.core.{Game, User}
+import mehbat.games.{BoutsRimes, BoutsRimesGamer}
 
 import scala.concurrent.Future
 import scala.io.StdIn
@@ -21,16 +23,26 @@ object WebServer {
 		//// needed for the future onFailure in the end
 		//implicit val executionContext = system.dispatcher
 
+		val game: BoutsRimes = new BoutsRimes
+		def getGamer(userId: String): BoutsRimesGamer = {
+			val gamer = new BoutsRimesGamer(User(userId, "Anonymous"), game)
+			if (userId != "__none__" && !gamer.isInGame) gamer.enterGame()
+			gamer
+		}
+
 		val router =
 			path("game") {
 				cors() {
 					get {
 						extractCredentials { creds =>
+							val userId = creds match {
+								case Some(OAuth2BearerToken(JsonWebToken(_, claimsSet, _))) =>
+									claimsSet.asSimpleMap.get.get("sub").toString
+								case _ => "__none__"
+							}
+							val gamer = getGamer(userId)
 							complete {
-								creds match {
-									case Some(OAuth2BearerToken(token)) => "Found it! -> " + token
-									case _ => "No creds"
-								}
+								gamer.getLines.map(_.text).toString
 							}
 						}
 					}

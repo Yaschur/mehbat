@@ -29,6 +29,7 @@ class BoutsRimes extends Game {
 		assert(!userId.isEmpty)
 		if (currentPlayer.getOrElse("") == userId)
 			lines match {
+				case Vector() => List()
 				case _ :+ l1 :+ l2 if l2.author == userId => List(l1, l2)
 				case _ => List(lines.last)
 			}

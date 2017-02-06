@@ -9,7 +9,7 @@ import akka.http.scaladsl.server.Directives._
 import akka.stream.ActorMaterializer
 import authentikat.jwt.JsonWebToken
 import ch.megard.akka.http.cors.CorsDirectives._
-import mehbat.core.{Game, User}
+import mehbat.core.{Anonym, Game, Person, User}
 import mehbat.games.{BoutsRimes, BoutsRimesGamer}
 
 import scala.concurrent.Future
@@ -24,9 +24,9 @@ object WebServer {
 		//implicit val executionContext = system.dispatcher
 
 		val game: BoutsRimes = new BoutsRimes
-		def getGamer(userId: String): BoutsRimesGamer = {
-			val gamer = new BoutsRimesGamer(User(userId, "Anonymous"), game)
-			if (userId != "__none__" && !gamer.isInGame) gamer.enterGame()
+		def getGamer(user: User): BoutsRimesGamer = {
+			val gamer = new BoutsRimesGamer(user, game)
+			if (!gamer.isInGame) gamer.enterGame()
 			gamer
 		}
 
@@ -37,8 +37,8 @@ object WebServer {
 						extractCredentials { creds =>
 							val userId = creds match {
 								case Some(OAuth2BearerToken(JsonWebToken(_, claimsSet, _))) =>
-									claimsSet.asSimpleMap.get.get("sub").toString
-								case _ => "__none__"
+									Person(claimsSet.asSimpleMap.get.get("sub").toString, "NoName")
+								case _ => Anonym
 							}
 							val gamer = getGamer(userId)
 							complete {

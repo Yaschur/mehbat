@@ -1,11 +1,11 @@
-import mehbat.core.{Game, Gamer, User}
+import mehbat.core.{Game, Gamer, Person}
 import org.scalatest.FlatSpec
 
 class GamerSpec extends FlatSpec {
 
 	"A Gamer" can "add himself to game" in {
 		val game = getGame
-		val user = User("abc", "xyz")
+		val user = Person("abc", "xyz")
 		val gamer = new Gamer(user, game)
 
 		gamer.enterGame()
@@ -15,7 +15,7 @@ class GamerSpec extends FlatSpec {
 
 	it must "not be in game without enter" in {
 		val game = getGame
-		val user = User("abc", "xyz")
+		val user = Person("abc", "xyz")
 
 		val gamer = new Gamer(user, game)
 
@@ -24,11 +24,11 @@ class GamerSpec extends FlatSpec {
 
 	it can "leave game" in {
 		val game = getGame
-		val user = User("abc", "xyz")
+		val user = Person("abc", "xyz")
 		val gamer = new Gamer(user, game)
-		gamer.enterGame
+		gamer.enterGame()
 
-		gamer.exitGame
+		gamer.exitGame()
 
 		assert(!gamer.isInGame)
 	}

@@ -1,7 +1,19 @@
 package mehbat.core
 
 class Gamer(user: User, game: Game) {
-	def enterGame(): Unit = game.addGamer(user.userId, user.userId)
-	def exitGame(): Unit = game.removeGamer(user.userId, user.userId)
-	def isInGame: Boolean = game.isInGame(user.userId)
+	def enterGame(): Unit =
+		user match {
+			case Person(userId, _) => game.addGamer (userId, userId)
+			case Anonym =>
+		}
+	def exitGame(): Unit =
+		user match {
+			case Person(userId, _) => game.removeGamer(userId, userId)
+			case Anonym =>
+		}
+	def isInGame: Boolean =
+		user match {
+			case Person(userId, _) => game.isInGame(userId)
+			case Anonym => false
+		}
 }

@@ -1,5 +1,7 @@
 package mehbat.core
 
-case class User(userId: String, name: String){
+trait User
+case class Person(userId: String, name: String) extends User{
 	require(!userId.isEmpty && !name.isEmpty)
 }
+case object Anonym extends User

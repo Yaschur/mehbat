@@ -13,4 +13,11 @@ class BoutsRimesGamer(user: User, game: BoutsRimes) extends Gamer(user, game) {
 			case Person(userId, _) => game.getLines(userId)
 			case Anonym => List()
 		}
+	def canPlay: Boolean = {
+		val gcu = game.currentPlayer
+		user match {
+			case Person(userId, _) if !gcu.isEmpty => gcu.get == userId
+			case _ => false
+		}
+	}
 }

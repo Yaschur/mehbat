@@ -12,12 +12,18 @@ export class AppComponent {
 
 	constructor(private auth: Auth, public authHttp: AuthHttp) { }
 
-	title = 'mehbat will be';
+	title: String = 'mehbat rocks';
+	lines: String[] = [];
+	canPlay: Boolean = false;
 
 	public showToken() {
 		this.authHttp.get('http://localhost:8080/game')
 			.subscribe(
-				data => this.title = data.text(),
+				data => {
+					var res = data.json();
+					this.lines = res.lines;
+					this.canPlay = res.canPlay;
+				},
 				err => console.log(err)
 			);
 	}

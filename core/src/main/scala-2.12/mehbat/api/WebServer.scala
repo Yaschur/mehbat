@@ -30,9 +30,9 @@ object WebServer {
 		//implicit val executionContext = system.dispatcher
 
 		val game: BoutsRimes = new BoutsRimes
-		final case class GameOut(lines: Seq[String])
+		final case class GameOut(lines: Seq[String], canPlay: Boolean)
 		final case class GameIn(line: String)
-		implicit val gameOutFormat = jsonFormat1(GameOut)
+		implicit val gameOutFormat = jsonFormat2(GameOut)
 		implicit val gameInFormat = jsonFormat1(GameIn)
 
 		def getGamer(user: User): BoutsRimesGamer = {
@@ -41,7 +41,8 @@ object WebServer {
 			gamer
 		}
 		def getOut(user: User): GameOut = {
-			GameOut(getGamer(user).getLines.map(_.text))
+			val gamer = getGamer(user)
+			GameOut(gamer.getLines.map(_.text), gamer.canPlay)
 		}
 		def getIn(user: User, line: String): Unit = {
 			getGamer(user).addLines(line)

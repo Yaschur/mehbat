@@ -6,3 +6,7 @@
   <button (click)="showToken()" *ngIf="auth.authenticated()">Show token</button>
   <button (click)="auth.logout()" *ngIf="auth.authenticated()">Log Out</button>
 </div>
+<div>
+  <p *ngFor="let line of lines">{{ line }}</p>
+</div>
+<div><input type="text" *ngIf="canPlay" /></div>

@@ -23,7 +23,7 @@ class BoutsRimes extends Game {
 	private[mehbat] def addLine(author: String, text: String): Unit = {
 		assert(!author.isEmpty && !text.isEmpty)
 		if (currentPlayer.getOrElse("") == author)
-			lines :+ Line(author, text)
+			lines = lines :+ Line(author, text)
 	}
 	private[mehbat] def getLines(userId: String): List[Line] = {
 		assert(!userId.isEmpty)

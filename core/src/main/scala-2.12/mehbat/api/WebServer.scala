@@ -31,7 +31,9 @@ object WebServer {
 
 		val game: BoutsRimes = new BoutsRimes
 		final case class GameOut(lines: Seq[String])
+		final case class GameIn(line: String)
 		implicit val gameOutFormat = jsonFormat1(GameOut)
+		implicit val gameInFormat = jsonFormat1(GameIn)
 
 		def getGamer(user: User): BoutsRimesGamer = {
 			val gamer = new BoutsRimesGamer(user, game)
@@ -40,6 +42,9 @@ object WebServer {
 		}
 		def getOut(user: User): GameOut = {
 			GameOut(getGamer(user).getLines.map(_.text))
+		}
+		def getIn(user: User, line: String): Unit = {
+			getGamer(user).addLines(line)
 		}
 
 		val extractUser: Directive1[User] =
@@ -56,6 +61,12 @@ object WebServer {
 						get {
 							complete {
 								getOut(user)
+							}
+						}~
+						post {
+							entity(as[GameIn]) { game =>
+								getIn(user, game.line)
+								complete(StatusCodes.OK)
 							}
 						}
 					}

@@ -3,14 +3,20 @@ package mehbat.api
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.Http.ServerBinding
+import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import akka.http.scaladsl.model._
 import akka.http.scaladsl.model.headers.{Authorization, OAuth2BearerToken}
+import akka.http.scaladsl.server.{Directive, Directive0, Directive1}
 import akka.http.scaladsl.server.Directives._
 import akka.stream.ActorMaterializer
 import authentikat.jwt.JsonWebToken
 import ch.megard.akka.http.cors.CorsDirectives._
 import mehbat.core.{Anonym, Game, Person, User}
 import mehbat.games.{BoutsRimes, BoutsRimesGamer}
+import spray.json.DefaultJsonProtocol
+
+import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
+import spray.json.DefaultJsonProtocol._
 
 import scala.concurrent.Future
 import scala.io.StdIn
@@ -24,25 +30,32 @@ object WebServer {
 		//implicit val executionContext = system.dispatcher
 
 		val game: BoutsRimes = new BoutsRimes
+		final case class GameOut(lines: Seq[String])
+		implicit val gameOutFormat = jsonFormat1(GameOut)
+
 		def getGamer(user: User): BoutsRimesGamer = {
 			val gamer = new BoutsRimesGamer(user, game)
 			if (!gamer.isInGame) gamer.enterGame()
 			gamer
 		}
+		def getOut(user: User): GameOut = {
+			GameOut(getGamer(user).getLines.map(_.text))
+		}
+
+		val extractUser: Directive1[User] =
+			extractCredentials.map {
+				case Some(OAuth2BearerToken(JsonWebToken(_, claimsSet, _))) =>
+					Person(claimsSet.asSimpleMap.get("sub"), "NoName")
+				case _ => Anonym
+			}
 
 		val router =
-			path("game") {
-				cors() {
-					get {
-						extractCredentials { creds =>
-							val userId = creds match {
-								case Some(OAuth2BearerToken(JsonWebToken(_, claimsSet, _))) =>
-									Person(claimsSet.asSimpleMap.get.get("sub").toString, "NoName")
-								case _ => Anonym
-							}
-							val gamer = getGamer(userId)
+			extractUser { user =>
+				path("game") {
+					cors() {
+						get {
 							complete {
-								gamer.getLines.map(_.text).toString
+								getOut(user)
 							}
 						}
 					}

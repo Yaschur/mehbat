@@ -5,6 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "prod": "ng serve --env=prod",
     "lint": "tslint \"src/**/*.ts\" --project src/tsconfig.json --type-check"
   },
   "private": true,

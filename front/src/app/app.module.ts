@@ -3,6 +3,7 @@ import { HttpModule, Http, RequestOptions } from '@angular/http';
 import { provideAuth, AuthHttp, AuthConfig } from 'angular2-jwt';
 import { BrowserModule } from '@angular/platform-browser';
 
+import { GameService } from './game/models/game.service';
 import { AppComponent } from './app.component';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
@@ -22,7 +23,8 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
 			provide: AuthHttp,
 			useFactory: authHttpServiceFactory,
 			deps: [ Http, RequestOptions ]
-		}
+		},
+		GameService
 	],
 	bootstrap: [AppComponent]
 })

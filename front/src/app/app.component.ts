@@ -1,6 +1,14 @@
 import { Component } from '@angular/core';
 import { Auth } from './auth/auth.service';
-import { AuthHttp } from 'angular2-jwt';
+import { GameService } from './game/models/game.service';
+import { Game } from './game/models/game.model';
+
+import { Observable } from 'rxjs/Observable';
+
+import 'rxjs/add/observable/of';
+
+import 'rxjs/add/operator/catch';
+
 
 @Component({
 	selector: 'app-root',
@@ -10,21 +18,16 @@ import { AuthHttp } from 'angular2-jwt';
 })
 export class AppComponent {
 
-	constructor(private auth: Auth, public authHttp: AuthHttp) { }
-
 	title: String = 'mehbat rocks';
-	lines: String[] = [];
-	canPlay: Boolean = false;
+	game: Game = { lines: [], canPlay: false };
+
+	constructor(public auth: Auth, private gameSrv: GameService) { }
 
 	public showToken() {
-		this.authHttp.get('http://localhost:8080/game')
+		this.gameSrv.getGame()
 			.subscribe(
-				data => {
-					var res = data.json();
-					this.lines = res.lines;
-					this.canPlay = res.canPlay;
-				},
-				err => console.log(err)
+				resp => this.game = resp,
+				error => console.error(error)
 			);
 	}
 }

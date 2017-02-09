@@ -4,8 +4,11 @@
   "angular-cli": {},
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "prod": "ng serve --env=prod",
+    "start": "npm run serve-dev",
+    "serve-dev": "ng serve",
+    "serve-prod": "ng serve --env=prod",
+    "build-dev": "ng build",
+    "build-prod": "ng build --env=prod",
     "lint": "tslint \"src/**/*.ts\" --project src/tsconfig.json --type-check"
   },
   "private": true,

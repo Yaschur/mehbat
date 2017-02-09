@@ -1,4 +1,6 @@
 export class Game {
-	lines: string[];
-	canPlay: boolean;
+
+	static noGame: Game = new Game([], false);
+
+	constructor(public lines: string[], public canPlay: boolean) { }
 }

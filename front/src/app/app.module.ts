@@ -2,17 +2,19 @@ import { NgModule } from '@angular/core';
 import { HttpModule, Http, RequestOptions } from '@angular/http';
 import { provideAuth, AuthHttp, AuthConfig } from 'angular2-jwt';
 import { BrowserModule } from '@angular/platform-browser';
+import { GameComponent } from './game/game.component';
 
 import { GameService } from './game/models/game.service';
 import { AppComponent } from './app.component';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
-	return new AuthHttp( new AuthConfig({}), http, options);
+	return new AuthHttp( new AuthConfig({ noJwtError: true }), http, options);
 }
 
 @NgModule({
 	declarations: [
-		AppComponent
+		AppComponent,
+		GameComponent
 	],
 	imports: [
 		HttpModule,
@@ -26,6 +28,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
 		},
 		GameService
 	],
+
 	bootstrap: [AppComponent]
 })
 export class AppModule { }

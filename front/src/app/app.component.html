@@ -3,10 +3,6 @@
 </h1>
 <div>
 	<button (click)="auth.login()" *ngIf="!auth.authenticated()">Log In</button>
-  <button (click)="showToken()" *ngIf="auth.authenticated()">Show token</button>
   <button (click)="auth.logout()" *ngIf="auth.authenticated()">Log Out</button>
 </div>
-<div>
-  <p *ngFor="let line of game.lines">{{ line }}</p>
-</div>
-<div><input type="text" *ngIf="game.canPlay" /></div>
+<app-game-place></app-game-place>

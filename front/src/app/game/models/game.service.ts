@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AuthHttp } from 'angular2-jwt';
+import { Response } from '@angular/http';
 import { Headers } from '@angular/http';
 import { environment } from '../../../environments/environment';
 
@@ -20,8 +21,8 @@ export class GameService {
 			.get(environment.api)
 			.map(resp => resp.json() as Game);
 	}
-	addLine(line: string) {
-		this.aHttp
+	addLine(line: string): Observable<Response> {
+		return this.aHttp
 			.post(environment.api, JSON.stringify({ line: line }), { headers: this.headers });
 	}
 }

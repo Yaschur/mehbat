@@ -9,6 +9,7 @@ import { GameService } from './models/game.service';
 export class GameComponent implements OnInit {
 
 	game: Game = Game.noGame;
+	addline: string = '';
 
 	constructor(private gameSrv: GameService) { }
 
@@ -25,5 +26,17 @@ export class GameComponent implements OnInit {
 					this.game = Game.noGame;
 				}
 			);
+	}
+	public addLine() {
+		this.gameSrv.addLine(this.addline)
+		.subscribe(
+			resp => {
+				this.getGame();
+				this.addline = '';
+			},
+			error => {
+					console.error(error);
+				}
+		);
 	}
 }

@@ -1,4 +1,4 @@
 <div>
   <p *ngFor="let line of game.lines">{{ line }}</p>
 </div>
-<div><input type="text" *ngIf="game.canPlay" /></div>
+<div *ngIf="game.canPlay"><input type="text" [(ngModel)]="addline" /><button (click)="addLine()">>>></button></div>

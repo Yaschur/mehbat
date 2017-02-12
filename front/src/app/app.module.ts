@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { HttpModule, Http, RequestOptions } from '@angular/http';
 import { provideAuth, AuthHttp, AuthConfig } from 'angular2-jwt';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 import { GameComponent } from './game/game.component';
 
 import { GameService } from './game/models/game.service';
@@ -18,7 +19,8 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
 	],
 	imports: [
 		HttpModule,
-		BrowserModule
+		BrowserModule,
+		FormsModule
 	],
 	providers: [
 		{
